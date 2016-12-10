@@ -1,0 +1,27 @@
+{
+  "name": "FranceMap",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "^1.4.0",
+    "bootstrap": "^3.2.0",
+    "angular-animate": "^1.4.0",
+    "angular-simple-logger": "^0.1.7",
+    "ui-leaflet": "^2.0.0",
+    "angular-bootstrap": "^2.2.0",
+    "angular-modal-service": "^0.10.1"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.4.0"
+  },
+  "appPath": "app",
+  "moduleName": "testmapApp",
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    }
+  }
+}

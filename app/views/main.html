@@ -1,0 +1,27 @@
+<div ng-controller="MainCtrl as $ctrl">
+
+  <p><a href class="btn btn-default btn-lg " ng-click="modalCarte(0)">Show Complex</a></p>
+  <p>{{complexResult}}</p>
+
+
+  <div class="row">
+    <div class="col-md-6">
+      <leaflet id="myMap" width="100%" height="350px" events="events" geojson="geojson"></leaflet>
+      <button type="button" class="btn btn-default" ng-click="$ctrl.open(1)">Modifier</button>
+    </div>
+    <div class="col-md-6">
+      <leaflet width="100%" height="350px"></leaflet>
+      <button type="button" class="btn btn-default" ng-click="$ctrl.open(2)">Modifier</button>
+    </div>
+    <div class="col-md-6">
+      <leaflet width="100%" height="350px"></leaflet>
+      <button type="button" class="btn btn-default" ng-click="$ctrl.open(3)">Modifier</button>
+    </div>
+    <div class="col-md-6">
+      <leaflet width="100%" height="350px"></leaflet>
+      <button type="button" class="btn btn-default" ng-click="$ctrl.open(4)">Modifier</button>
+    </div>
+  </div>
+
+
+</div>
