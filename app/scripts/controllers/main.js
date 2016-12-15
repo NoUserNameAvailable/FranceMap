@@ -95,7 +95,7 @@ angular.module('testmapApp')
     var addressPointsToMarkers = function (points) {
       return points.map(function (ap) {
         return {
-          message: "<div ng-include src=\"'views/templates/markerpopup.html'\"></div>",
+          message: ap.url,
           lat: ap.lat,
           lng: ap.lng,
           ressource: ap.url
@@ -117,8 +117,7 @@ angular.module('testmapApp')
 
     //var urlLieux = "http://fr.dbpedia.org/sparql?default-graph-uri=&query=select+*+where+%7B%0D%0A%0D%0A%7B%3Fdonnee+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fproperty%2Fville%3E+%22Paris%22%40fr%7D+UNION+%7B%3Fdonnee+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fproperty%2Fville%3E+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fresource%2FParis%3E%7D%0D%0A%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FMuseum%3E%7D+UNION+%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FArchitecturalStructure%3E%7D%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23lat%3E+%3Flat.%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23long%3E+%3Flong.%0D%0A%7D&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
     var urlLieux =
-"http://fr.dbpedia.org/sparql?default-graph-uri=&query=select+%3Fdonnee+%3Flat+%3Flong+%28concat%28group_concat%28%3FcategorieNom%3Bseparator%3D%22%2C%22%29%29as+%3Fcategories%29++%0D%0Awhere+%7B%0D%0A%7B%3Fdonnee+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fproperty%2Fville%3E+%22Paris%22%40fr%7D+UNION+%7B%3Fdonnee+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fproperty%2Fville%3E+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fresource%2FParis%3E%7D%0D%0A%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FMuseum%3E%7D+UNION+%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FArchitecturalStructure%3E%7D%0D%0A%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FMuseum%3E%7D+UNION+%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FArchitecturalStructure%3E%7D%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23lat%3E+%3Flat.%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23long%3E+%3Flong.%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2Fsubject%3E+%3Fcategorie.%0D%0A%3Fcategorie+rdfs%3Alabel+%3FcategorieNom.%0D%0AFILTER+NOT+EXISTS+%7B+%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FReligiousBuilding%3E+%7D%0D%0A%7Dgroup+by+%3Fdonnee+%3Flat+%3Flong+&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
-
+"https://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=%0D%0A%0D%0Aselect+%3Fdonnee+%3Flat+%3Flong+%28concat%28group_concat%28%3FcategorieNom%3Bseparator%3D%22%2C%22%29%29as+%3Fcategories%29++%0D%0Awhere+%7B%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2Flocation%3E+%3Fadresse%0D%0A%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FMuseum%3E%7D+UNION+%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FArchitecturalStructure%3E%7D.%0D%0A%7B%3Fdonnee+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2Flocation%3E+%3Chttp%3A%2F%2Fdbpedia.org%2Fresource%2FParis%3E%7DUNION+%7B%3Fdonnee+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2Fsubject%3E+%3Chttp%3A%2F%2Fdbpedia.org%2Fresource%2FCategory%3AMuseums_in_Paris%3E%7D%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23lat%3E+%3Flat.%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23long%3E+%3Flong.%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2Fsubject%3E+%3Fcategorie.%0D%0A%3Fcategorie+rdfs%3Alabel+%3FcategorieNom.%0D%0AFILTER+NOT+EXISTS+%7B+%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FReligiousBuilding%3E+%7D%0D%0A%7Dgroup+by+%3Fdonnee+%3Flat+%3Flong+&format=application%2Fsparql-results%2Bjson&CXML_redir_for_subjs=121&CXML_redir_for_hrefs=&timeout=30000&debug=on";
     //Récupération des données et premier affichage
     $http.get(urlLieux)
       .then(function (response) {
@@ -199,4 +198,20 @@ angular.module('testmapApp')
       }, 500); // close, but give 500ms for bootstrap to animate
     };
 
+  }]);
+
+angular.module("testmapApp")
+  .directive('radioButton', [function () {
+    return {
+      restrict: 'E',
+      scope: {
+        pass: "=",
+        some: "@",
+        properties: "="
+      },
+      templateUrl: 'view/template/markerpopup.html',
+      controller: ["$scope", function ($scope) {
+        // Isolated $scope here
+      }]
+    };
   }]);
