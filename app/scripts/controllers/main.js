@@ -8,7 +8,7 @@
  * Controller of the testmapApp
  */
 angular.module('testmapApp')
-  .controller('MainCtrl', ['$scope', 'nemSimpleLogger', 'ModalService', '$http', function ($scope, nemSimpleLogger, ModalService, $http) {
+  .controller('MainCtrl', ['$scope', 'nemSimpleLogger', 'ModalService', '$http', 'leafletData', function ($scope, nemSimpleLogger, ModalService, $http, leafletData) {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -19,11 +19,126 @@ angular.module('testmapApp')
 
     nemSimpleLogger.log('hi');
 
-    var carte0 = 'vide';
-    var carte1 = '';
-    var carte2 = '';
-    var carte3 = '';
-    $scope.cartes = [carte0, carte1, carte2, carte3];
+
+
+    $scope.categories = [
+      {"nom":"Musée scientifique en France", "checked":false},
+      {"nom":"http://fr.dbpedia.org/resource/Catégorie:Musée_scientifique_en_France", "checked":false},
+    ];
+
+    $scope.change = function (){
+      var liste = [];
+      var listeMusee = [];
+
+      angular.forEach($scope.categories, function(value, key) {
+        if(value.checked === true){
+          liste.push(value);
+          angular.forEach($scope.listeBrute, function(v, k) {
+            if(v.categories.indexOf(value.nom) !==-1 ){
+              listeMusee.push(v);
+            }
+          });
+        }
+      });
+
+      leafletData.getDirectiveControls().then(function (controls) {
+        var markers = addressPointsToMarkers(listeMusee);
+        controls.markers.create(markers, $scope.markers);
+        $scope.markers = markers;
+      });
+
+      console.log($scope.markers);
+    };
+
+    angular.extend($scope, {
+      center: {
+        lat: 48.853,
+        lng: 2.35,
+        zoom: 13
+      },
+      watchOptions: {
+        markers: {
+          type: null,
+          individual: {
+            type: null
+          }
+        }
+      },
+      events: {
+        map: {
+          enable: ['moveend', 'popupopen'],
+          logic: 'emit'
+        },
+        marker: {
+          enable: [],
+          logic: 'emit'
+        }
+      },
+      layers: {
+        baselayers: {
+          osm: {
+            name: 'OpenStreetMap',
+            type: 'xyz',
+            url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          }
+        },
+        overlays: {
+          realworld: {
+            name: "Real world data",
+            type: "markercluster",
+            visible: true
+          }
+        }
+      }
+    });
+
+    var addressPointsToMarkers = function (points) {
+      return points.map(function (ap) {
+        return {
+          message: "<div ng-include src=\"'views/templates/markerpopup.html'\"></div>",
+          lat: ap.lat,
+          lng: ap.lng,
+          ressource: ap.url
+        };
+      });
+    };
+
+    var dataPretty = function (points) {
+      return points.results.bindings.map(function (ap) {
+        var cat = ap.categories.value.split(",");
+        return {
+          url: ap.donnee.value,
+          lat: parseFloat(ap.lat.value),
+          lng: parseFloat(ap.long.value),
+          categories : cat
+        };
+      });
+    };
+
+    //var urlLieux = "http://fr.dbpedia.org/sparql?default-graph-uri=&query=select+*+where+%7B%0D%0A%0D%0A%7B%3Fdonnee+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fproperty%2Fville%3E+%22Paris%22%40fr%7D+UNION+%7B%3Fdonnee+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fproperty%2Fville%3E+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fresource%2FParis%3E%7D%0D%0A%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FMuseum%3E%7D+UNION+%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FArchitecturalStructure%3E%7D%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23lat%3E+%3Flat.%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23long%3E+%3Flong.%0D%0A%7D&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
+    var urlLieux =
+"http://fr.dbpedia.org/sparql?default-graph-uri=&query=select+%3Fdonnee+%3Flat+%3Flong+%28concat%28group_concat%28%3FcategorieNom%3Bseparator%3D%22%2C%22%29%29as+%3Fcategories%29++%0D%0Awhere+%7B%0D%0A%7B%3Fdonnee+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fproperty%2Fville%3E+%22Paris%22%40fr%7D+UNION+%7B%3Fdonnee+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fproperty%2Fville%3E+%3Chttp%3A%2F%2Ffr.dbpedia.org%2Fresource%2FParis%3E%7D%0D%0A%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FMuseum%3E%7D+UNION+%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FArchitecturalStructure%3E%7D%0D%0A%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FMuseum%3E%7D+UNION+%7B%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FArchitecturalStructure%3E%7D%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23lat%3E+%3Flat.%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23long%3E+%3Flong.%0D%0A%3Fdonnee+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2Fsubject%3E+%3Fcategorie.%0D%0A%3Fcategorie+rdfs%3Alabel+%3FcategorieNom.%0D%0AFILTER+NOT+EXISTS+%7B+%3Fdonnee+rdf%3Atype+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2FReligiousBuilding%3E+%7D%0D%0A%7Dgroup+by+%3Fdonnee+%3Flat+%3Flong+&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
+
+    //Récupération des données et premier affichage
+    $http.get(urlLieux)
+      .then(function (response) {
+
+        $scope.listeBrute = dataPretty(response.data);
+        leafletData.getDirectiveControls().then(function (controls) {
+          var markers = addressPointsToMarkers($scope.listeBrute);
+          controls.markers.create(markers, $scope.markers);
+          $scope.markers = markers;
+        });
+      });
+
+
+
+    $scope.$on('leafletDirectiveMarker.click', function(event, args) {
+      // Args will contain the marker name and other relevant information
+      console.log(args);
+
+
+    });
 
 
     $scope.modalCarte = function (numCarte) {
@@ -46,70 +161,6 @@ angular.module('testmapApp')
 
     };
 
-    $scope.$on("leafletDirectiveGeoJson.myMap.mouseover", function(ev, leafletPayload) {
-      countryMouseover(leafletPayload.leafletObject.feature, leafletPayload.leafletEvent);
-    });
-
-    $scope.$on("leafletDirectiveGeoJson.myMap.click", function(ev, leafletPayload) {
-      countryClick(leafletPayload.leafletObject, leafletPayload.leafletEvent);
-    });
-
-    angular.extend($scope, {
-      center: {
-        lat: 40.8471,
-        lng: 14.0625,
-        zoom: 2
-      },
-      legend: {
-        colors: ['#CC0066', '#006699', '#FF0000', '#00CC00', '#FFCC00'],
-        labels: ['Oceania', 'America', 'Europe', 'Africa', 'Asia']
-      }
-    });
-
-    function getColor() {
-      var letters = '0123456789ABCDEF';
-      var color = '#';
-      for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
-
-    function style(feature) {
-      return {
-        fillColor: getColor(),
-        weight: 1,
-        opacity: 1,
-        color: 'white',
-        dashArray: '1',
-        fillOpacity: 0.7
-      };
-    }
-
-    function countryMouseover(feature, leafletEvent) {
-      console.log("mouse over");
-      var layer = leafletEvent.target;
-      layer.setStyle({
-        weight: 2,
-        color: '#666',
-        fillColor: 'white'
-      });
-      layer.bringToFront();
-      $scope.selectedCountry = feature;
-      console.log(feature);
-    }
-
-    // Get the countries geojson data from a JSON
-    $http.get("data/regions-2016.json").success(function (data, status) {
-      angular.extend($scope, {
-        geojson: {
-          data: data,
-          style: style,
-          resetStyleOnMouseout: true
-        },
-        selectedCountry: {}
-      });
-    });
 
   }])
 

@@ -1,27 +1,59 @@
 <div ng-controller="MainCtrl as $ctrl">
 
-  <p><a href class="btn btn-default btn-lg " ng-click="modalCarte(0)">Show Complex</a></p>
-  <p>{{complexResult}}</p>
 
 
-  <div class="row">
-    <div class="col-md-6">
-      <leaflet id="myMap" width="100%" height="350px" events="events" geojson="geojson"></leaflet>
-      <button type="button" class="btn btn-default" ng-click="$ctrl.open(1)">Modifier</button>
+  <!--&lt;!&ndash;<p><a href class="btn btn-default btn-lg " ng-click="modalCarte(0)">Show Complex</a></p>&ndash;&gt;-->
+  <!--&lt;!&ndash;<p>{{complexResult}}</p>&ndash;&gt;-->
+
+
+  <!--&lt;!&ndash;<div class="container fill">&ndash;&gt;-->
+  <!--&lt;!&ndash;<leaflet id="map" events="events" geojson="geojson"></leaflet>&ndash;&gt;-->
+  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+  <!--&lt;!&ndash;<button type="button" class="btn btn-default" ng-click="$ctrl.open(1)">Modifier</button>&ndash;&gt;-->
+
+
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Dégote Ta Gallerie (DTG)</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catégorie<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li ng-repeat="item in categories">
+                <div class="checkbox">
+                  <label><input type="checkbox" ng-model="item.checked" ng-click="change()">{{item.nom}}</label>
+                </div>
+              </li>
+
+            </ul>
+          </li>
+          <li><a href="#">Page 2</a></li>
+          <li><a href="#">Page 3</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="col-md-6">
-      <leaflet width="100%" height="350px"></leaflet>
-      <button type="button" class="btn btn-default" ng-click="$ctrl.open(2)">Modifier</button>
-    </div>
-    <div class="col-md-6">
-      <leaflet width="100%" height="350px"></leaflet>
-      <button type="button" class="btn btn-default" ng-click="$ctrl.open(3)">Modifier</button>
-    </div>
-    <div class="col-md-6">
-      <leaflet width="100%" height="350px"></leaflet>
-      <button type="button" class="btn btn-default" ng-click="$ctrl.open(4)">Modifier</button>
-    </div>
+  </nav>
+
+  <div class="mapContainer">
+    <leaflet lf-center="center" markers="markers" layers="layers" event-broadcast="events" watch-options="watchOptions" width="100%" height="100%">
   </div>
+
+
+
 
 
 </div>

@@ -29,6 +29,7 @@ module.exports = function(config) {
       'bower_components/ui-leaflet/dist/ui-leaflet.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-modal-service/dst/angular-modal-service.js',
+      'bower_components/leaflet.markercluster/dist/leaflet.markercluster-src.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
