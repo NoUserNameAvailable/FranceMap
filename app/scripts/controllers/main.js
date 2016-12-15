@@ -199,19 +199,3 @@ angular.module('testmapApp')
     };
 
   }]);
-
-angular.module("testmapApp")
-  .directive('radioButton', [function () {
-    return {
-      restrict: 'E',
-      scope: {
-        pass: "=",
-        some: "@",
-        properties: "="
-      },
-      templateUrl: 'view/template/markerpopup.html',
-      controller: ["$scope", function ($scope) {
-        // Isolated $scope here
-      }]
-    };
-  }]);
