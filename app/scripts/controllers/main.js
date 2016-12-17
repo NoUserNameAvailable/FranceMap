@@ -89,13 +89,6 @@ angular.module('testmapApp')
             type: 'xyz',
             url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           }
-        },
-        overlays: {
-          realworld: {
-            name: "Real world data",
-            type: "markercluster",
-            visible: true
-          }
         }
       }
     });
@@ -195,10 +188,35 @@ angular.module('testmapApp')
       var urlLieux3 = "&format=application%2Fsparql-results%2Bjson&CXML_redir_for_subjs=121&CXML_redir_for_hrefs=&timeout=30000&debug=on";
 
       if(attributes['mapDomicile'] !== "undefined"){
-        var myDataPromise2 = dbpedia.getDurationTimeWalking(attributes['mapDomicile'], attributes['mapLat'], attributes['mapLng']);
+        var myDataPromise2 = dbpedia.getDurationTime(attributes['mapDomicile'], attributes['mapLat'], attributes['mapLng'], "walking");
         myDataPromise2.then(function (response) {
-          scope.walkingDistance = response.rows[0].elements[0].distance.text;
-          scope.walkingTime = response.rows[0].elements[0].duration.text;
+          console.log(response);
+            scope.walkingDistance = response.rows[0].elements[0].distance.text;
+            scope.walkingTime = response.rows[0].elements[0].duration.text;
+        }).catch(function (response){
+          console.log(response);
+        });
+
+        var myDataPromise4 = dbpedia.getDurationTime(attributes['mapDomicile'], attributes['mapLat'], attributes['mapLng'], "driving");
+        myDataPromise4.then(function (response) {
+            scope.drivingDistance = response.rows[0].elements[0].distance.text;
+            scope.drivingTime = response.rows[0].elements[0].duration.text;
+        }).catch(function (response){
+          console.log(response);
+        });
+
+        var myDataPromise5 = dbpedia.getDurationTime(attributes['mapDomicile'], attributes['mapLat'], attributes['mapLng'], "bicycling");
+        myDataPromise5.then(function (response) {
+          scope.bicyclingDistance = response.rows[0].elements[0].distance.text;
+          scope.bicyclingTime = response.rows[0].elements[0].duration.text;
+        }).catch(function (response){
+          console.log(response);
+        });
+
+        var myDataPromise6 = dbpedia.getDurationTime(attributes['mapDomicile'], attributes['mapLat'], attributes['mapLng'], "transit");
+        myDataPromise6.then(function (response) {
+          scope.transitDistance = response.rows[0].elements[0].distance.text;
+          scope.transitTime = response.rows[0].elements[0].duration.text;
         }).catch(function (response){
           console.log(response);
         });
