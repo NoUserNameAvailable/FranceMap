@@ -101,3 +101,13 @@ html {
 .navbar {
   margin-bottom: 0;
 }
+
+.markerpopup img {
+  width: 100px;
+}
+
+.leaflet-popup-content-wrapper {
+  min-width: 340px;
+}
+
+

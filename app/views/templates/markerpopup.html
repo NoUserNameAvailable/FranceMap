@@ -1,4 +1,12 @@
-<div ng-controller="MarkerpopupCtrl">
-  {{hello}}
-  {{url}}
+<div ng-controller="MarkerpopupCtrl" ng-cloak>
+  <h3>{{nom}}</h3>
+  <p>{{resume}}</p>
+  <img ng-if="photo" class="markerpopup" src="{{photo}}">
+
+
+  <a target="_blank" href="{{site}}">Site</a>
+  <a target="_blank" href="{{wiki}}">Wiki</a>
+
+  <h4>Temps</h4>
+  <p>A pied : {{walkingTime}}({{walkingDistance}})</p>
 </div>

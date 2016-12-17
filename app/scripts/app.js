@@ -14,5 +14,6 @@ angular
     'nemLogging',
     'ui-leaflet',
     'ui.bootstrap',
-    'angularModalService'
+    'angularModalService',
+    'bc.AngularUrlEncode'
   ]);
